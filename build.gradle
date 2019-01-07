@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        //classpath 'com.github.johnrengelman.shadow:4.0.3'
+    }
+}
+
+apply plugin: 'java'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'io.dropwizard.metrics:metrics-core:4.0.2'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    testCompile 'junit:junit:3.8.2'
+}
+
+tasks.withType(Test) {
+  testLogging {
+    exceptionFormat "full"
+    events "passed", "skipped", "failed", "standardOut", "standardError"
+    showStandardStreams = true
+  }
+}
+
+apply from: 'javadoc.gradle'
+
+apply plugin: 'jacoco'
+
+jacocoTestReport {
+    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+    classDirectories =  files(sourceSets.main.output)
+    executionData = files(jacocoTestReport.executionData)
+    reports {
+        xml.enabled = true // coveralls needed
+        html.enabled = true
+    }
+}
+
+tasks.jacocoTestReport {
+    dependsOn 'test'
+}

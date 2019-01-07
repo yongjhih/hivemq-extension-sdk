@@ -2,3 +2,6 @@
 /hivemq-extension-sdk.iml
 /.idea/
 .DS_Store
+
+.gradle/
+/build/
